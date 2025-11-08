@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Eredmény</title>
+    <style>
+        body { font-family: Arial; text-align: center; }
+        table { margin: 20px auto; width: 60%; border-collapse: collapse; font-size: 20px; }
+        th, td { border: 1px solid black; padding: 12px 16px; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .chart-container { margin: 30px auto; width: 700px; height: 400px; }
+    </style>
+</head>
+<body>
+
+<h2>Árfolyam eredmény: <span th:text="${currency}"></span></h2>
+
+<table>
+    <tr><th>Dátum</th><th>Deviza</th><th>Árfolyam</th></tr>
+    <tr th:each="rate : ${rates}">
+        <td th:text="${rate.date}"></td>
+        <td th:text="${rate.currency}"></td>
+        <td th:text="${rate.rate}"></td>
+    </tr>
+</table>
+
+<div class="chart-container">
+    <canvas id="chartCanvas"></canvas>
+</div>
+
+<br>
+<a href="/soap" style="font-size:18px;">Vissza</a>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    const labels = [[${dates}]];
+    const dataValues = [[${values}]];
+
+    const ctx = document.getElementById('chartCanvas').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Árfolyam',
+                data: dataValues,
+                borderWidth: 2,
+                borderColor: '#0033cc',
+                pointRadius: 3,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { font: { size: 14 } } }
+            },
+            scales: {
+                x: { ticks: { font: { size: 14 } } },
+                y: { ticks: { font: { size: 14 } } }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
