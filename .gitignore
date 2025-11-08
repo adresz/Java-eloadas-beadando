@@ -4,6 +4,16 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### SOAP / JAXB / Generated Sources ###
+# Ha a SOAP kliens forrásait Maven generálja (pl. wsimport plugin)
+generated-sources/
+src/main/java/soapclient/
+
+### Logs & Temp ###
+*.log
+*.tmp
+*.bak
+
 ### STS ###
 .apt_generated
 .classpath
@@ -14,7 +24,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -31,3 +41,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### OS / Misc ###
+.DS_Store
+Thumbs.db
