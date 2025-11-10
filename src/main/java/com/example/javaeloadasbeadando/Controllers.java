@@ -1,17 +1,24 @@
 package com.example.javaeloadasbeadando;
 
+import com.oanda.v20.Context;
+import com.oanda.v20.ContextBuilder;
 import com.oanda.v20.account.AccountSummary;
+import com.oanda.v20.pricing.ClientPrice;
+import com.oanda.v20.pricing.PricingGetRequest;
+import com.oanda.v20.pricing.PricingGetResponse;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.*;
+
 
 @Controller
 public class Controllers {
@@ -59,20 +66,15 @@ public class Controllers {
     @RestController
     public class AccountController {
 
-        private final OandaService oandaService;
-
-        public AccountController() {
-            this.oandaService = new OandaService("345e2224e2678e6dbed8c2cf789c031d-d6859a32b66dc765643e874ec5f929e9");
-        }
-
         @GetMapping(value = "/forex-account", produces = "text/html; charset=UTF-8")
         public String getAccountSummary() {
-            String accountId = "101-004-37634228-001";
-            AccountSummary s = oandaService.getAccountSummary(accountId);
-
-            if (s == null) {
+            AccountSummary s;
+            try {
+                s = Config.getContext().account.summary(Config.ACCOUNTID).getAccount();
+            } catch (Exception e) {
                 return "<h2 style='text-align: center; color: red;'>❌ Hiba történt az adatok lekérésekor!</h2>";
             }
+
 
             return "<html><body style='display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: Arial; margin-top: 30px;'>"
                     + "<h2 style='text-align: center;'>Számlainformációk</h2>"
@@ -119,6 +121,34 @@ public class Controllers {
 
         private String row(String label, Object value) {
             return "<tr><td style='padding: 8px;'><b>" + label + "</b></td><td style='padding: 8px;'>" + (value != null ? value : "") + "</td></tr>";
+        }
+    }
+
+    @Controller
+    public class PricePageController {
+
+        @GetMapping("/forex-aktár")
+        public String pricePage(@RequestParam(defaultValue = "EUR_USD") String instrument, Model model) {
+            Map<String, Object> priceData = new LinkedHashMap<>();
+            priceData.put("error", null);
+
+            try {
+                // Config használata
+                PricingGetRequest request = new PricingGetRequest(Config.ACCOUNTID, Collections.singletonList(instrument));
+                ClientPrice price = Config.getContext().pricing.get(request).getPrices().get(0);
+
+                priceData.put("instrument", price.getInstrument());
+                priceData.put("time", price.getTime());
+                priceData.put("bid", price.getBids().get(0).getPrice());
+                priceData.put("ask", price.getAsks().get(0).getPrice());
+
+            } catch (Exception e) {
+                priceData.put("error", "Nem sikerült lekérni az árat: " + e.getMessage());
+            }
+
+            model.addAttribute("priceData", priceData);
+            model.addAttribute("selectedInstrument", instrument);
+            return "price";
         }
     }
 }
