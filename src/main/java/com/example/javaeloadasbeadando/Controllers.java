@@ -65,12 +65,64 @@ public class Controllers {
             this.oandaService = new OandaService("345e2224e2678e6dbed8c2cf789c031d-d6859a32b66dc765643e874ec5f929e9");
         }
 
-        @GetMapping("/forex-account")
-        public AccountSummary getAccountSummary() {
+        @GetMapping(value = "/forex-account", produces = "text/html; charset=UTF-8")
+        public String getAccountSummary() {
             String accountId = "101-004-37634228-001";
-            return oandaService.getAccountSummary(accountId);
+            AccountSummary s = oandaService.getAccountSummary(accountId);
+
+            if (s == null) {
+                return "<h2 style='text-align: center; color: red;'>❌ Hiba történt az adatok lekérésekor!</h2>";
+            }
+
+            return "<html><body style='display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: Arial; margin-top: 30px;'>"
+                    + "<h2 style='text-align: center;'>Számlainformációk</h2>"
+                    + "<table border='1' style='border-collapse: collapse; width: 60%; text-align: left;'>"
+                    + "<tr style='background-color: #f2f2f2;'><th style='padding: 8px;'>Adat</th><th style='padding: 8px;'>Érték</th></tr>"
+                    + row("ID", s.getId())
+                    + row("Alias", s.getAlias())
+                    + row("Currency", s.getCurrency())
+                    + row("Balance", s.getBalance())
+                    + row("Created By User ID", s.getCreatedByUserID())
+                    + row("Created Time", s.getCreatedTime())
+                    + row("Guaranteed SL Order Mode", s.getGuaranteedStopLossOrderMode())
+                    + row("Profit/Loss (PL)", s.getPl())
+                    + row("Resettable PL", s.getResettablePL())
+                    + row("Resettable PL Time", s.getResettablePLTime())
+                    + row("Financing", s.getFinancing())
+                    + row("Commission", s.getCommission())
+                    + row("Guaranteed Execution Fees", s.getGuaranteedExecutionFees())
+                    + row("Margin Rate", s.getMarginRate())
+                    + row("Margin Call Enter Time", s.getMarginCallEnterTime())
+                    + row("Margin Call Extension Count", s.getMarginCallExtensionCount())
+                    + row("Last Margin Call Extension Time", s.getLastMarginCallExtensionTime())
+                    + row("Open Trade Count", s.getOpenTradeCount())
+                    + row("Open Position Count", s.getOpenPositionCount())
+                    + row("Pending Order Count", s.getPendingOrderCount())
+                    + row("Hedging Enabled", s.getHedgingEnabled())
+                    + row("Last Order Fill Timestamp", s.getLastOrderFillTimestamp())
+                    + row("Unrealized PL", s.getUnrealizedPL())
+                    + row("Margin Used", s.getMarginUsed())
+                    + row("Margin Available", s.getMarginAvailable())
+                    + row("Position Value", s.getPositionValue())
+                    + row("Margin Closeout Unrealized PL", s.getMarginCloseoutUnrealizedPL())
+                    + row("Margin Closeout NAV", s.getMarginCloseoutNAV())
+                    + row("Margin Closeout Margin Used", s.getMarginCloseoutMarginUsed())
+                    + row("Margin Closeout Percent", s.getMarginCloseoutPercent())
+                    + row("Margin Closeout Position Value", s.getMarginCloseoutPositionValue())
+                    + row("Withdrawal Limit", s.getWithdrawalLimit())
+                    + row("Margin Call Margin Used", s.getMarginCallMarginUsed())
+                    + row("Margin Call Percent", s.getMarginCallPercent())
+                    + row("Last Transaction ID", s.getLastTransactionID())
+                    + row("NAV", s.getNAV())
+                    + "</table></body></html>";
+        }
+
+        private String row(String label, Object value) {
+            return "<tr><td style='padding: 8px;'><b>" + label + "</b></td><td style='padding: 8px;'>" + (value != null ? value : "") + "</td></tr>";
         }
     }
-
-
 }
+
+
+
+
