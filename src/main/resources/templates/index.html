@@ -14,29 +14,85 @@
     <div id="main">
         <div class="inner">
 
+            <!-- Header -->
             <header id="header">
                 <a href="#" class="logo"><strong>Forex</strong> App</a>
             </header>
 
+            <!-- Banner / Welcome -->
             <section id="banner">
                 <div class="content">
                     <header>
                         <h1>Üdvözöllek!</h1>
-                        <p>Java előadás beadandó, készítette:</p>
-                        <p>Borbély Bettina(MX4HYQ)</p>
-                        <p>Tiger Adrián(C3Z0TY)</p>
+                        <p>Java beadandó, készítette:</p>
+                        <p>Borbély Bettina (MX4HYQ)</p>
+                        <p>Tiger Adrián (C3Z0TY)</p>
+                        <p>Lejjebb megtalálható az oldal bemutatása</p>
                     </header>
-                    <ul class="actions">
-                        <li><a th:href="@{/fnyit}" class="button big">Pozíció nyitása</a></li>
-                        <li><a th:href="@{/fzar}" class="button big">Pozíció zárása</a></li>
-                    </ul>
                 </div>
             </section>
 
-            <section>
-                <div class="features">
+            <!-- Features / Képek egymás alatt -->
+            <section style="width:95%; max-width:1400px; margin:0 auto; padding:20px;">
 
+                <!-- SOAP Menü -->
+                <div style="margin-bottom:60px;">
+                    <h2>SOAP Menü</h2>
+                    <img th:src="@{/images/soap_menu.png}" alt="SOAP Menü" style="width:100%; height:auto; border-radius:8px;">
+                    <p>Ez az oldal lehetővé teszi a deviza lekérdezést: kiválaszthatod az instrumentumot és a dátumtartományt.</p>
                 </div>
+
+                <!-- SOAP Eredmény -->
+                <div style="margin-bottom:60px;">
+                    <h2>SOAP Eredmény</h2>
+                    <img th:src="@{/images/soap_result.png}" alt="SOAP Eredmény" style="width:100%; height:auto; border-radius:8px;">
+                    <p>A lekérdezés után itt jelenik meg az árfolyam eredménye táblázatos formában, valamint grafikonon ábrázolva.</p>
+                </div>
+
+                <!-- Forex Account -->
+                <div style="margin-bottom:60px;">
+                    <h2>Forex Account</h2>
+                    <img th:src="@{/images/forex_account.png}" alt="Forex Account" style="width:100%; height:auto; border-radius:8px;">
+                    <p>Az oldal megjeleníti a számla összes fontos adatát, például egyenleg, elérhető margin és nyitott pozíciók.</p>
+                </div>
+
+                <!-- Forex Aktuális árfolyam -->
+                <div style="margin-bottom:60px;">
+                    <h2>Forex Aktuális Árfolyam</h2>
+                    <img th:src="@{/images/forex_aktualis.png}" alt="Forex Aktuális Árfolyam" style="width:100%; height:auto; border-radius:8px;">
+                    <p>Instrumentum kiválasztása után az aktuális árfolyamok azonnal megjelennek, könnyen áttekinthető formában.</p>
+                </div>
+
+                <!-- Forex Historikus árfolyam -->
+                <div style="margin-bottom:60px;">
+                    <h2>Forex Historikus Árfolyam</h2>
+                    <img th:src="@{/images/forex_histar.png}" alt="Forex Historikus" style="width:100%; height:auto; border-radius:8px;">
+                    <p>Az oldal megjeleníti a kiválasztott instrumentum historikus árfolyamát a megadott időszak és felbontás szerint.</p>
+                </div>
+
+                <!-- Forex Nyit -->
+                <div style="margin-bottom:60px;">
+                    <h2>Forex Pozíció Nyitás</h2>
+                    <img th:src="@{/images/forex_nyit_oldal.png}" alt="Nyitás oldal" style="width:100%; height:auto; margin-bottom:15px; border-radius:8px;">
+                    <img th:src="@{/images/forex_nyit_eredmeny.png}" alt="Nyitás eredmény" style="width:100%; height:auto; border-radius:8px;">
+                    <p>Itt választhatsz instrumentumot és nyithatsz pozíciót. A második kép mutatja az eredményt nyitás után.</p>
+                </div>
+
+                <!-- Forex Pozíciók -->
+                <div style="margin-bottom:60px;">
+                    <h2>Forex Pozíciók</h2>
+                    <img th:src="@{/images/forex_poz.png}" alt="Pozíciók" style="width:100%; height:auto; border-radius:8px;">
+                    <p>Az oldal áttekintést nyújt a jelenleg nyitott pozíciókról, részletes adatokkal minden pozícióhoz.</p>
+                </div>
+
+                <!-- Forex Zár -->
+                <div style="margin-bottom:60px;">
+                    <h2>Forex Pozíció Zárás</h2>
+                    <img th:src="@{/images/forex_zar_oldal.png}" alt="Zárás oldal" style="width:100%; height:auto; margin-bottom:15px; border-radius:8px;">
+                    <img th:src="@{/images/forex_zar_eredmeny.png}" alt="Zárás után" style="width:100%; height:auto; border-radius:8px;">
+                    <p>Itt kiválaszthatod a nyitott pozíciókat, majd a zárás gomb megnyomása után a pozíció eltűnik a listából (második kép).</p>
+                </div>
+
             </section>
 
         </div>
