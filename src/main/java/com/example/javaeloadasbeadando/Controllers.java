@@ -1,24 +1,20 @@
 package com.example.javaeloadasbeadando;
 
 import com.oanda.v20.Context;
-import com.oanda.v20.ContextBuilder;
 import com.oanda.v20.account.AccountSummary;
+import com.oanda.v20.primitives.InstrumentName;
+import com.oanda.v20.order.MarketOrderRequest;
+import com.oanda.v20.order.OrderCreateRequest;
+import com.oanda.v20.order.OrderCreateResponse;
 import com.oanda.v20.pricing.ClientPrice;
 import com.oanda.v20.pricing.PricingGetRequest;
-import com.oanda.v20.pricing.PricingGetResponse;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.*;
-
 
 @Controller
 public class Controllers {
@@ -29,7 +25,6 @@ public class Controllers {
         this.oandaService = new OandaService("345e2224e2678e6dbed8c2cf789c031d-d6859a32b66dc765643e874ec5f929e9");
     }
 
-
     @GetMapping("/soap")
     public String soapForm(Model model) {
         model.addAttribute("param", new MessagePrice());
@@ -38,7 +33,6 @@ public class Controllers {
 
     @PostMapping("/soap")
     public String soapSubmit(@ModelAttribute MessagePrice messagePrice, Model model) throws Exception {
-
         List<ExchangeRateData> rates = BankService.fetchExchangeRates(
                 messagePrice.getCurrency(),
                 messagePrice.getStartDate(),
@@ -74,7 +68,6 @@ public class Controllers {
             } catch (Exception e) {
                 return "<h2 style='text-align: center; color: red;'>❌ Hiba történt az adatok lekérésekor!</h2>";
             }
-
 
             return "<html><body style='display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: Arial; margin-top: 30px;'>"
                     + "<h2 style='text-align: center;'>Számlainformációk</h2>"
@@ -133,7 +126,6 @@ public class Controllers {
             priceData.put("error", null);
 
             try {
-                // Config használata
                 PricingGetRequest request = new PricingGetRequest(Config.ACCOUNTID, Collections.singletonList(instrument));
                 ClientPrice price = Config.getContext().pricing.get(request).getPrices().get(0);
 
@@ -141,7 +133,6 @@ public class Controllers {
                 priceData.put("time", price.getTime());
                 priceData.put("bid", price.getBids().get(0).getPrice());
                 priceData.put("ask", price.getAsks().get(0).getPrice());
-
             } catch (Exception e) {
                 priceData.put("error", "Nem sikerült lekérni az árat: " + e.getMessage());
             }
@@ -151,8 +142,44 @@ public class Controllers {
             return "price";
         }
     }
+
+    @Controller
+    public class FnyitController {
+
+        @GetMapping("/fnyit")
+        public String fnyit(Model model) {
+            model.addAttribute("param", new MessageFnyit());
+            model.addAttribute("result", null);
+            return "fnyit";
+        }
+
+        @PostMapping("/fnyit")
+        public String fnyitSubmit(@ModelAttribute MessageFnyit messageFnyit, Model model) {
+            String result;
+            try {
+                Context ctx = new Context(Config.URL, Config.TOKEN);
+                InstrumentName instrument = new InstrumentName(messageFnyit.getInstrument());
+
+                MarketOrderRequest marketOrderRequest = new MarketOrderRequest();
+                marketOrderRequest.setInstrument(instrument);
+                marketOrderRequest.setUnits(messageFnyit.getUnits());
+
+                OrderCreateRequest request = new OrderCreateRequest(Config.ACCOUNTID);
+                request.setOrder(marketOrderRequest);
+
+                OrderCreateResponse response = ctx.order.create(request);
+
+                result = "Sikeres pozíciónyitás!<br>Instrumentum: "
+                        + messageFnyit.getInstrument()
+                        + "<br>Mennyiség: " + messageFnyit.getUnits()
+                        + "<br>Trade ID: " + response.getOrderFillTransaction().getId();
+            } catch (Exception e) {
+                result = "Hiba történt: " + e.getMessage();
+            }
+
+            model.addAttribute("param", messageFnyit);
+            model.addAttribute("result", result);
+            return "fnyit";
+        }
+    }
 }
-
-
-
-
