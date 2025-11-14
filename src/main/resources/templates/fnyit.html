@@ -1,34 +1,62 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
-    <meta charset="UTF-8">
-    <title>Forex-Nyit menü</title>
-</head>
-<body>
-<h2>Forex Pozíció Nyitás</h2>
+<head th:replace="~{fragments/header :: head('Forex - Pozíció nyitása')}"></head>
 
-<form th:action="@{/fnyit}" th:object="${param}" method="post">
-    <label>Instrumentum:</label>
-    <select th:field="*{instrument}">
-        <option value="EUR_USD">EUR_USD</option>
-        <option value="USD_CHF">USD_CHF</option>
-        <option value="GBP_USD">GBP_USD</option>
-        <option value="USD_JPY">USD_JPY</option>
-    </select><br><br>
+<body class="is-preload">
 
-    <label>Mennyiség</label>
-    <input type="number" th:field="*{units}" min="-100" max="100"><br><br>
+<div id="wrapper">
 
-    <input type="submit" value="Pozíció nyitása">
-</form>
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/nav :: sidebar}"></th:block>
 
-<hr>
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
 
-<div th:if="${result}">
-    <h3>Eredmény:</h3>
-    <p th:utext="${result}"></p>
+            <!-- Header -->
+            <header id="header">
+                <a href="#" class="logo"><strong>Forex</strong> Nyitás</a>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <h1>Pozíció nyitása</h1>
+
+                <div class="box">
+                    <form th:action="@{/fnyit}" th:object="${param}" method="post">
+                        <label>Instrumentum:</label>
+                        <select th:field="*{instrument}" class="select">
+                            <option value="EUR_USD">EUR/USD</option>
+                            <option value="USD_CHF">USD/CHF</option>
+                            <option value="GBP_USD">GBP/USD</option>
+                            <option value="USD_JPY">USD/JPY</option>
+                        </select>
+
+                        <label>Mennyiség:</label>
+                        <input type="number" th:field="*{units}" min="-100000" max="100000" step="1" class="input" required/>
+
+                        <button type="submit" class="primary">Pozíció nyitása</button>
+                    </form>
+                </div>
+
+                <!-- Eredmény -->
+                <div th:if="${result}" class="box" style="margin-top:20px;">
+                    <h3>Eredmény:</h3>
+                    <p th:utext="${result}" style="white-space: pre-line;"></p>
+                </div>
+
+                <!-- Vissza gomb -->
+                <div style="text-align:center; margin-top:30px;">
+                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                </div>
+            </section>
+
+        </div>
+    </div>
 </div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>

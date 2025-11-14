@@ -1,33 +1,71 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Nyitott Pozíciók</title>
-</head>
-<body>
+<head th:replace="~{fragments/header :: head('Forex - Nyitott Pozíciók')}"></head>
 
-<h2>Nyitott Pozíciók</h2>
+<body class="is-preload">
 
-<div th:if="${error}">
-    <p th:text="${error}" style="color:red;"></p>
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/nav :: sidebar}"></th:block>
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="#" class="logo"><strong>Forex</strong> Pozíciók</a>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <h1>Nyitott Pozíciók</h1>
+
+                <!-- Hibaüzenet -->
+                <div th:if="${error}" class="box" style="background:#ffebee; border-left:4px solid #e74c3c;">
+                    <p style="color:#c0392b; margin:0;" th:text="${error}"></p>
+                </div>
+
+                <!-- Táblázat -->
+                <div class="table-wrapper" th:if="${positions}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Instrumentum</th>
+                            <th>Long Mennyiség</th>
+                            <th>Short Mennyiség</th>
+                            <th>P/L</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p : ${positions}">
+                            <td th:text="${p.instrument}"></td>
+                            <td th:text="${p.long.units}"></td>
+                            <td th:text="${p.short.units}"></td>
+                            <td th:text="${#numbers.formatDecimal(p.pl, 1, 2)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Üres állapot -->
+                <div th:if="${positions == null or positions.isEmpty()}" style="text-align:center; color:#999; padding:40px;">
+                    <p>Nincs nyitott pozíció.</p>
+                </div>
+
+                <!-- Vissza gomb -->
+                <div style="text-align:center; margin-top:30px;">
+                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                </div>
+            </section>
+
+        </div>
+    </div>
 </div>
 
-<table border="1" cellspacing="0" cellpadding="8" th:if="${positions}">
-    <tr>
-        <th>Instrumentum</th>
-        <th>Long Units</th>
-        <th>Short Units</th>
-        <th>PL</th>
-    </tr>
-
-    <tr th:each="p : ${positions}">
-        <td th:text="${p.instrument}"></td>
-        <td th:text="${p.long.units}"></td>
-        <td th:text="${p.short.units}"></td>
-        <td th:text="${p.pl}"></td>
-    </tr>
-
-</table>
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>

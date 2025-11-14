@@ -1,0 +1,32 @@
+<div th:fragment="sidebar" id="sidebar">
+    <div class="inner">
+
+        <!-- Logo -->
+        <section id="search" class="alt">
+            <a href="#" class="logo"><strong>Forex</strong> App</a>
+        </section>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <header class="major"><h2>Menü</h2></header>
+            <ul>
+                <li><a th:href="@{/}">Kezdőlap</a></li>
+                <li><a th:href="@{/soap}">MNB Lekérdezés</a></li>
+                <li><a th:href="@{/forex-account}">Számla infó</a></li>
+                <li><a th:href="@{/forex-aktár}">Aktuális ár</a></li>
+                <li><a th:href="@{/forex-histar}">Historikus árak</a></li>
+                <li><a th:href="@{/fnyit}">Pozíció nyitás</a></li>
+                <li><a th:href="@{/fpoz}">Pozíciók</a></li>
+                <li><a th:href="@{/fzar}">Pozíció zárás</a></li>
+            </ul>
+        </nav>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <p class="copyright">
+                &copy; <span th:text="${#dates.format(#dates.createNow(),'yyyy')}"></span> Forex App.
+            </p>
+        </footer>
+
+    </div>
+</div>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/header :: head('Forex Dashboard')}"></th:block>
+<body class="is-preload">
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/nav :: sidebar}"></th:block>
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="#" class="logo"><strong>Forex</strong> Dashboard</a>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <h1>MNB Árfolyamok</h1>
+                <p th:text="${#dates.format(#dates.createNow(), 'yyyy. MM. dd. HH:mm')}"></p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr><th>Deviza</th><th>Vétel</th><th>Eladás</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="rate : ${rates}">
+                            <td th:text="${rate.currency}">EUR</td>
+                            <td th:text="${rate.buy}">410.50</td>
+                            <td th:text="${rate.sell}">412.30</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr class="major" />
+
+                <h2>Nyitott Pozíciók</h2>
+                <div class="table-wrapper">
+                    <table th:if="${openTrades != null and !openTrades.isEmpty()}">
+                        <thead>
+                        <tr>
+                            <th>ID</th><th>Pár</th><th>Menny.</th><th>Irány</th><th>P/L</th><th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="t : ${openTrades}">
+                            <td th:text="${t.id}"></td>
+                            <td th:text="${t.instrument}"></td>
+                            <td th:text="${t.units}"></td>
+                            <td th:text="${t.units > 0 ? 'LONG' : 'SHORT'}"></td>
+                            <td th:text="${t.profit > 0 ? '+' : ''} + ${#numbers.formatDecimal(t.profit, 1, 2)}"></td>
+                            <td>
+                                <form th:action="@{/close/{id}(id=${t.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="small">Zárás</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p th:if="${openTrades == null or openTrades.isEmpty()}" style="text-align:center;color:#999;">
+                        Nincs nyitott pozíció.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+
+</body>
+</html>

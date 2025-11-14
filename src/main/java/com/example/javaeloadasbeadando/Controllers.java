@@ -27,6 +27,11 @@ public class Controllers {
         this.oandaService = new OandaService("345e2224e2678e6dbed8c2cf789c031d-d6859a32b66dc765643e874ec5f929e9");
     }
 
+    @GetMapping("/")
+    public String MainPage() {
+        return "index";
+    }
+
     @GetMapping("/soap")
     public String soapForm(Model model) {
         model.addAttribute("param", new MessagePrice());

@@ -1,28 +1,58 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Deviza lekérdezés</title>
-</head>
-<body>
-<h2>Deviza lekérdezés</h2>
+<head th:replace="~{fragments/header :: head('MNB - Deviza Lekérdezés')}"></head>
 
-<form th:action="@{/soap}" th:object="${param}" method="post">
-    <label>Deviza:</label>
-    <select th:field="*{currency}">
-        <option value="EUR">EUR</option>
-        <option value="USD">USD</option>
-        <option value="CHF">CHF</option>
-    </select><br><br>
+<body class="is-preload">
 
-    <label>Kezdő dátum:</label>
-    <input type="date" th:field="*{startDate}" required><br><br>
+<div id="wrapper">
 
-    <label>Befejező dátum:</label>
-    <input type="date" th:field="*{endDate}" required><br><br>
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/nav :: sidebar}"></th:block>
 
-    <button type="submit">Lekérdezés</button>
-</form>
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="#" class="logo"><strong>MNB</strong> Lekérdezés</a>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <h1>Deviza Árfolyam Lekérdezés</h1>
+
+                <div class="box">
+                    <form th:action="@{/soap}" th:object="${param}" method="post">
+                        <label>Deviza:</label>
+                        <select th:field="*{currency}" class="select">
+                            <option value="EUR">EUR</option>
+                            <option value="USD">USD</option>
+                            <option value="CHF">CHF</option>
+                        </select>
+
+                        <label>Kezdő dátum:</label>
+                        <input type="date" th:field="*{startDate}" class="input" required/>
+
+                        <label>Befejező dátum:</label>
+                        <input type="date" th:field="*{endDate}" class="input" required/>
+
+                        <button type="submit" class="primary">Lekérdezés</button>
+                    </form>
+                </div>
+
+                <!-- Vissza gomb -->
+                <div style="text-align:center; margin-top:30px;">
+                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>

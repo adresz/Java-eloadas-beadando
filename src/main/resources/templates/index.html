@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head('Forex Dashboard')"></head>
+
+<body class="is-preload">
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:replace="fragments/nav :: sidebar"></th:block>
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <header id="header">
+                <a href="#" class="logo"><strong>Forex</strong> App</a>
+            </header>
+
+            <section id="banner">
+                <div class="content">
+                    <header>
+                        <h1>Üdvözöllek!</h1>
+                        <p>Java előadás beadandó, készítette:</p>
+                        <p>Borbély Bettina(MX4HYQ)</p>
+                        <p>Tiger Adrián(C3Z0TY)</p>
+                    </header>
+                    <ul class="actions">
+                        <li><a th:href="@{/fnyit}" class="button big">Pozíció nyitása</a></li>
+                        <li><a th:href="@{/fzar}" class="button big">Pozíció zárása</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <div class="features">
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</div>
+
+<th:block th:replace="fragments/scripts :: scripts"></th:block>
+
+</body>
+</html>

@@ -1,45 +1,69 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Forex Árfolyam</title>
-    <style>
-        body { font-family: Arial; text-align: center; margin-top: 40px; }
-        table { margin: 20px auto; border-collapse: collapse; width: 40%; font-size: 18px; }
-        th, td { border: 1px solid black; padding: 8px; }
-        select { padding: 6px; font-size: 16px; }
-    </style>
-</head>
-<body>
+<head th:replace="~{fragments/header :: head('Forex - Aktuális Árfolyam')}"></head>
 
-<h2>Aktuális Forex Árfolyam</h2>
+<body class="is-preload">
 
-<form method="get" action="/forex-aktár">
-    <label for="instrument">Válassz instrumentumot:</label>
-    <select name="instrument" id="instrument" onchange="this.form.submit()">
-        <option th:value="EUR_USD" th:selected="${selectedInstrument=='EUR_USD'}">EUR/USD</option>
-        <option th:value="GBP_USD" th:selected="${selectedInstrument=='GBP_USD'}">GBP/USD</option>
-        <option th:value="USD_JPY" th:selected="${selectedInstrument=='USD_JPY'}">USD/JPY</option>
-        <option th:value="USD_CHF" th:selected="${selectedInstrument=='USD_CHF'}">USD/CHF</option>
-    </select>
-</form>
+<div id="wrapper">
 
-<table>
-    <tr><th>Instrument</th><td th:text="${priceData.instrument}">-</td></tr>
-    <tr><th>Bid</th><td th:text="${priceData.bid}">-</td></tr>
-    <tr><th>Ask</th><td th:text="${priceData.ask}">-</td></tr>
-    <tr><th>Idő</th><td th:text="${priceData.time}">-</td></tr>
-    <tr th:if="${priceData.error != null}">
-        <th colspan="2" th:text="${priceData.error}"></th>
-    </tr>
-    <!-- Hiba sor, csak akkor jelenik meg, ha van error -->
-    <tr th:if="${priceData.containsKey('error') and priceData.error != null}">
-        <th colspan="2" th:text="${priceData.error}"></th>
-    </tr>
-</table>
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/nav :: sidebar}"></th:block>
 
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
 
+            <!-- Header -->
+            <header id="header">
+                <a href="#" class="logo"><strong>Forex</strong> Aktuális</a>
+            </header>
 
+            <!-- Content -->
+            <section>
+                <h1>Aktuális Árfolyam</h1>
+
+                <!-- Űrlap -->
+                <div class="box">
+                    <form method="get" th:action="@{/forex-aktár}">
+                        <label for="instrument">Válassz instrumentumot:</label>
+                        <select name="instrument" id="instrument" class="select" onchange="this.form.submit()">
+                            <option value="EUR_USD" th:selected="${selectedInstrument == 'EUR_USD'}">EUR/USD</option>
+                            <option value="GBP_USD" th:selected="${selectedInstrument == 'GBP_USD'}">GBP/USD</option>
+                            <option value="USD_JPY" th:selected="${selectedInstrument == 'USD_JPY'}">USD/JPY</option>
+                            <option value="USD_CHF" th:selected="${selectedInstrument == 'USD_CHF'}">USD/CHF</option>
+                        </select>
+                    </form>
+                </div>
+
+                <!-- Táblázat -->
+                <div class="table-wrapper">
+                    <table>
+                        <tbody>
+                        <tr><th>Instrumentum</th><td th:text="${priceData.instrument}">—</td></tr>
+                        <tr><th>Bid</th><td th:text="${#numbers.formatDecimal(priceData.bid, 1, 5)}">—</td></tr>
+                        <tr><th>Ask</th><td th:text="${#numbers.formatDecimal(priceData.ask, 1, 5)}">—</td></tr>
+                        <tr><th>Idő</th><td th:text="${priceData.time}">—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Hibaüzenet -->
+                <div th:if="${priceData.error}" class="box" style="background:#ffebee; border-left:4px solid #e74c3c;">
+                    <p style="color:#c0392b; margin:0;" th:text="${priceData.error}"></p>
+                </div>
+
+                <!-- Vissza gomb -->
+                <div style="text-align:center; margin-top:30px;">
+                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>

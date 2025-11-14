@@ -1,40 +1,72 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Eredmény</title>
-    <style>
-        body { font-family: Arial; text-align: center; }
-        table { margin: 20px auto; width: 60%; border-collapse: collapse; font-size: 20px; }
-        th, td { border: 1px solid black; padding: 12px 16px; }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        .chart-container { margin: 30px auto; width: 700px; height: 400px; }
-    </style>
-</head>
-<body>
+<head th:replace="~{fragments/header :: head('MNB - Eredmény')}"></head>
 
-<h2>Árfolyam eredmény: <span th:text="${currency}"></span></h2>
+<body class="is-preload">
 
-<table>
-    <tr><th>Dátum</th><th>Deviza</th><th>Árfolyam</th></tr>
-    <tr th:each="rate : ${rates}">
-        <td th:text="${rate.date}"></td>
-        <td th:text="${rate.currency}"></td>
-        <td th:text="${rate.rate}"></td>
-    </tr>
-</table>
+<div id="wrapper">
 
-<div class="chart-container">
-    <canvas id="chartCanvas"></canvas>
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/nav :: sidebar}"></th:block>
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="#" class="logo"><strong>MNB</strong> Eredmény</a>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <h1>Árfolyam eredmény: <span th:text="${currency}"></span></h1>
+
+                <!-- Táblázat -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Dátum</th>
+                            <th>Deviza</th>
+                            <th>Árfolyam</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="rate : ${rates}">
+                            <td th:text="${rate.date}"></td>
+                            <td th:text="${rate.currency}"></td>
+                            <td th:text="${#numbers.formatDecimal(rate.rate, 1, 2)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Grafikon -->
+                <div class="box" style="margin-top:30px; padding:20px;">
+                    <canvas id="chartCanvas" style="width:100%; max-width:800px; height:400px; margin:0 auto; display:block;"></canvas>
+                </div>
+
+                <!-- Vissza gomb -->
+                <div style="text-align:center; margin-top:30px;">
+                    <a th:href="@{/soap}" class="button primary">Új lekérdezés</a>
+                    <a th:href="@{/dashboard}" class="button" style="margin-left:10px;">Vissza a Dashboardra</a>
+                </div>
+            </section>
+
+        </div>
+    </div>
 </div>
 
-<br>
-<a href="/soap" style="font-size:18px;">Vissza</a>
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script th:inline="javascript">
-    const labels = [[${dates}]];
-    const dataValues = [[${values}]];
+    /*<![CDATA[*/
+    const labels = /*[[${dates}]]*/ [];
+    const dataValues = /*[[${values}]]*/ [];
 
     const ctx = document.getElementById('chartCanvas').getContext('2d');
     new Chart(ctx, {
@@ -42,26 +74,38 @@
         data: {
             labels: labels,
             datasets: [{
-                label: 'Árfolyam',
+                label: 'Árfolyam (' + /*[[${currency}]]*/ + ')',
                 data: dataValues,
-                borderWidth: 2,
-                borderColor: '#0033cc',
-                pointRadius: 3,
-                tension: 0.3
+                borderColor: '#0066cc',
+                backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: '#0066cc',
+                tension: 0.3,
+                fill: true
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { labels: { font: { size: 14 } } }
+                legend: {
+                    labels: { font: { size: 16, family: 'Arial' } }
+                }
             },
             scales: {
-                x: { ticks: { font: { size: 14 } } },
-                y: { ticks: { font: { size: 14 } } }
+                x: {
+                    ticks: { font: { size: 14 } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y: {
+                    ticks: { font: { size: 14 } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
             }
         }
     });
+    /*]]>*/
 </script>
 
 </body>
