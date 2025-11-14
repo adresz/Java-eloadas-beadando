@@ -2,6 +2,7 @@ package com.example.javaeloadasbeadando;
 
 import com.oanda.v20.Context;
 import com.oanda.v20.account.AccountSummary;
+import com.oanda.v20.instrument.CandlestickGranularity;
 import com.oanda.v20.primitives.InstrumentName;
 import com.oanda.v20.order.MarketOrderRequest;
 import com.oanda.v20.order.OrderCreateRequest;
@@ -11,7 +12,7 @@ import com.oanda.v20.pricing.PricingGetRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import com.oanda.v20.instrument.InstrumentCandlesRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -247,6 +248,59 @@ public class Controllers {
             }
 
             return "fpoz";
+        }
+    }
+
+    @Controller
+    public class ForexHistArController {
+
+        @GetMapping("/forex-histar")
+        public String histForm(Model model,
+                               @RequestParam(defaultValue = "EUR_USD") String instrument,
+                               @RequestParam(defaultValue = "D") String granularity) {
+
+            model.addAttribute("selectedInstrument", instrument);
+            model.addAttribute("selectedGranularity", granularity);
+
+            // instrument lista
+            model.addAttribute("instruments", List.of(
+                    "EUR_USD", "GBP_USD", "USD_JPY", "AUD_USD", "USD_CAD", "USD_CHF"
+            ));
+
+            // granularity lista
+            Map<String, String> gran = new LinkedHashMap<>();
+            gran.put("S5", "5 mp");
+            gran.put("S10", "10 mp");
+            gran.put("M1", "1 perc");
+            gran.put("M5", "5 perc");
+            gran.put("M15", "15 perc");
+            gran.put("H1", "1 óra");
+            gran.put("D", "Nap");
+            gran.put("W", "Hét");
+
+            model.addAttribute("gran", gran);
+
+            // historikus adatok lekérése
+            try {
+                Context ctx = new Context(Config.URL, Config.TOKEN);
+
+                com.oanda.v20.instrument.InstrumentCandlesRequest req =
+                        new com.oanda.v20.instrument.InstrumentCandlesRequest(
+                                new InstrumentName(instrument)
+                        );
+
+                req.setCount(10L);
+                req.setGranularity(CandlestickGranularity.valueOf(granularity));
+
+                var candles = ctx.instrument.candles(req).getCandles();
+
+                model.addAttribute("candles", candles);
+            } catch (Exception e) {
+                model.addAttribute("error", "Hiba a historikus adatok lekérésekor: " + e.getMessage());
+            }
+
+
+            return "forex-histar";
         }
     }
 }

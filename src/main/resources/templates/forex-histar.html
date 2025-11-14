@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Forex Historiák</title>
+</head>
+<body>
+
+<h2>Historikus Árfolyamok</h2>
+
+<form method="get" action="/forex-histar">
+    <label>Instrumentum:</label>
+    <select name="instrument" th:value="${selectedInstrument}">
+        <option th:each="i : ${instruments}"
+                th:value="${i}"
+                th:text="${i}"
+                th:selected="${i == selectedInstrument}"></option>
+    </select>
+
+    <label>Időfelbontás:</label>
+    <select name="granularity" th:value="${selectedGranularity}">
+        <option th:each="g : ${gran}"
+                th:value="${g.key}"
+                th:text="${g.value}"
+                th:selected="${g.key == selectedGranularity}"></option>
+    </select>
+
+    <button type="submit">Lekérés</button>
+</form>
+
+<br>
+
+<div th:if="${error}">
+    <p style="color:red;" th:text="${error}"></p>
+</div>
+
+<table border="1" cellpadding="6" th:if="${candles}">
+    <tr>
+        <th>Idő</th>
+        <th>Nyitó</th>
+        <th>Záró</th>
+        <th>High</th>
+        <th>Low</th>
+    </tr>
+
+    <tr th:each="c : ${candles}">
+        <td th:text="${c.time}"></td>
+        <td th:text="${c.mid.o}"></td>
+        <td th:text="${c.mid.c}"></td>
+        <td th:text="${c.mid.h}"></td>
+        <td th:text="${c.mid.l}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
