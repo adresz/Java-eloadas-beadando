@@ -230,4 +230,23 @@ public class Controllers {
 
         return "fzar";
     }
+    @Controller
+    public class ForexPozController {
+
+        @GetMapping("/fpoz")
+        public String listPositions(Model model) {
+            try {
+                Context ctx = new Context(Config.URL, Config.TOKEN);
+
+                var positions = ctx.position.listOpen(Config.ACCOUNTID).getPositions();
+
+                model.addAttribute("positions", positions);
+
+            } catch (Exception e) {
+                model.addAttribute("error", "Hiba a pozíciók lekérésekor: " + e.getMessage());
+            }
+
+            return "fpoz";
+        }
+    }
 }

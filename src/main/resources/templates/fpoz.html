@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nyitott Pozíciók</title>
+</head>
+<body>
+
+<h2>Nyitott Pozíciók</h2>
+
+<div th:if="${error}">
+    <p th:text="${error}" style="color:red;"></p>
+</div>
+
+<table border="1" cellspacing="0" cellpadding="8" th:if="${positions}">
+    <tr>
+        <th>Instrumentum</th>
+        <th>Long Units</th>
+        <th>Short Units</th>
+        <th>PL</th>
+    </tr>
+
+    <tr th:each="p : ${positions}">
+        <td th:text="${p.instrument}"></td>
+        <td th:text="${p.long.units}"></td>
+        <td th:text="${p.short.units}"></td>
+        <td th:text="${p.pl}"></td>
+    </tr>
+
+</table>
+
+</body>
+</html>
