@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+
 @Controller
 public class Controllers {
 
@@ -181,5 +182,52 @@ public class Controllers {
             model.addAttribute("result", result);
             return "fnyit";
         }
+    }
+    @GetMapping("/fzar")
+    public String closePositionForm(Model model) {
+        try {
+            Context ctx = new Context(Config.URL, Config.TOKEN);
+
+            // Nyitott trade-ek lekérése
+            var tradesResponse = ctx.trade.listOpen(Config.ACCOUNTID);
+            var trades = tradesResponse.getTrades();
+
+            model.addAttribute("trades", trades);
+            model.addAttribute("param", new MessageFzar());
+
+        } catch (Exception e) {
+            model.addAttribute("error", "Hiba a pozíciók lekérésekor: " + e.getMessage());
+        }
+
+        return "fzar";
+    }
+
+    @PostMapping("/fzar")
+    public String closePositionSubmit(@ModelAttribute("param") MessageFzar form, Model model) {
+
+        try {
+            Context ctx = new Context(Config.URL, Config.TOKEN);
+
+            String tradeId = String.valueOf(form.getTradeId());
+
+            ctx.trade.close(new com.oanda.v20.trade.TradeCloseRequest(
+                    Config.ACCOUNTID,
+                    new com.oanda.v20.trade.TradeSpecifier(tradeId)
+            ));
+
+            model.addAttribute("msg", "✔ Pozíció sikeresen lezárva! ID = " + tradeId);
+
+        } catch (Exception e) {
+            model.addAttribute("msg", "❌ Zárási hiba: ");
+        }
+
+        // Újratöltjük a nyitott tradeket, hogy friss legyen
+        try {
+            Context ctx = new Context(Config.URL, Config.TOKEN);
+            var trades = ctx.trade.listOpen(Config.ACCOUNTID).getTrades();
+            model.addAttribute("trades", trades);
+        } catch (Exception ignored) {}
+
+        return "fzar";
     }
 }

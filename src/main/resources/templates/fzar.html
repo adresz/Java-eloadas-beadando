@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Pozíció zárás</title>
+</head>
+<body>
+
+<h2>Nyitott pozíciók lezárása</h2>
+
+<form action="/fzar" method="post">
+
+    <label for="tradeId">Válaszd ki a lezárandó trade-et:</label><br>
+    <select name="tradeId" id="tradeId" required>
+        <option value="">-- Válassz pozíciót --</option>
+
+        <!-- Nyitott trade-ek listázása -->
+        <th:block th:each="t : ${trades}">
+            <option th:value="${t.id}"
+                    th:text="'ID: ' + ${t.id} + ' | ' + ${t.instrument} + ' | ' + ${t.currentUnits}">
+            </option>
+        </th:block>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Pozíció lezárása</button>
+
+</form>
+
+<br>
+
+<div style="color: green;" th:if="${msg}">
+    <p th:text="${msg}"></p>
+</div>
+
+<div style="color: red;" th:if="${error}">
+    <p th:text="${error}"></p>
+</div>
+
+</body>
+</html>
