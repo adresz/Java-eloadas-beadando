@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: head('Forex - Aktuális Árfolyam')}"></head>
+
+<head th:replace="~{fragments/header :: head('Forex - Árfolyam')}"></head>
 
 <body class="is-preload">
 
@@ -15,47 +16,40 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="#" class="logo"><strong>Forex</strong> Aktuális</a>
+                <a href="#" class="logo"><strong>Forex</strong> Árfolyam</a>
             </header>
 
             <!-- Content -->
             <section>
-                <h1>Aktuális Árfolyam</h1>
+                <h1>Aktuális Forex Árfolyam</h1>
 
-                <!-- Űrlap -->
                 <div class="box">
-                    <form method="get" th:action="@{/forex-aktár}">
+                    <form th:action="@{/forex-aktár}" method="get">
                         <label for="instrument">Válassz instrumentumot:</label>
                         <select name="instrument" id="instrument" class="select" onchange="this.form.submit()">
-                            <option value="EUR_USD" th:selected="${selectedInstrument == 'EUR_USD'}">EUR/USD</option>
-                            <option value="GBP_USD" th:selected="${selectedInstrument == 'GBP_USD'}">GBP/USD</option>
-                            <option value="USD_JPY" th:selected="${selectedInstrument == 'USD_JPY'}">USD/JPY</option>
-                            <option value="USD_CHF" th:selected="${selectedInstrument == 'USD_CHF'}">USD/CHF</option>
+                            <option th:value="EUR_USD" th:selected="${selectedInstrument=='EUR_USD'}">EUR/USD</option>
+                            <option th:value="GBP_USD" th:selected="${selectedInstrument=='GBP_USD'}">GBP/USD</option>
+                            <option th:value="USD_JPY" th:selected="${selectedInstrument=='USD_JPY'}">USD/JPY</option>
+                            <option th:value="USD_CHF" th:selected="${selectedInstrument=='USD_CHF'}">USD/CHF</option>
                         </select>
                     </form>
                 </div>
 
-                <!-- Táblázat -->
-                <div class="table-wrapper">
-                    <table>
-                        <tbody>
-                        <tr><th>Instrumentum</th><td th:text="${priceData.instrument}">—</td></tr>
-                        <tr><th>Bid</th><td th:text="${#numbers.formatDecimal(priceData.bid, 1, 5)}">—</td></tr>
-                        <tr><th>Ask</th><td th:text="${#numbers.formatDecimal(priceData.ask, 1, 5)}">—</td></tr>
-                        <tr><th>Idő</th><td th:text="${priceData.time}">—</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Hibaüzenet -->
-                <div th:if="${priceData.error}" class="box" style="background:#ffebee; border-left:4px solid #e74c3c;">
-                    <p style="color:#c0392b; margin:0;" th:text="${priceData.error}"></p>
-                </div>
+                <table class="box" style="margin-top:20px;">
+                    <tr><th>Instrument</th><td th:text="${priceData.instrument}">-</td></tr>
+                    <tr><th>Bid</th><td th:text="${priceData.bid}">-</td></tr>
+                    <tr><th>Ask</th><td th:text="${priceData.ask}">-</td></tr>
+                    <tr><th>Idő</th><td th:text="${priceData.time}">-</td></tr>
+                    <tr th:if="${priceData.containsKey('error') and priceData.error != null}">
+                        <th colspan="2" th:text="${priceData.error}"></th>
+                    </tr>
+                </table>
 
                 <!-- Vissza gomb -->
                 <div style="text-align:center; margin-top:30px;">
-                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                    <a th:href="@{/}" class="button">Vissza a Dashboardra</a>
                 </div>
+
             </section>
 
         </div>

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head('Számlainformációk')}"></head>
+
+<body class="is-preload">
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/nav :: sidebar}"></th:block>
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="#" class="logo"><strong>Forex</strong> Számla</a>
+            </header>
+
+            <!-- Content -->
+            <section>
+                <h1>Számlainformációk</h1>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Adat</th>
+                            <th>Érték</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>ID</td><td th:text="${summary.id}"></td></tr>
+                        <tr><td>Alias</td><td th:text="${summary.alias}"></td></tr>
+                        <tr><td>Currency</td><td th:text="${summary.currency}"></td></tr>
+                        <tr><td>Balance</td><td th:text="${summary.balance}"></td></tr>
+                        <tr><td>Created By User ID</td><td th:text="${summary.createdByUserID}"></td></tr>
+                        <tr><td>Created Time</td><td th:text="${summary.createdTime}"></td></tr>
+                        <tr><td>Guaranteed SL Order Mode</td><td th:text="${summary.guaranteedStopLossOrderMode}"></td></tr>
+                        <tr><td>Profit/Loss (PL)</td><td th:text="${summary.pl}"></td></tr>
+                        <tr><td>Resettable PL</td><td th:text="${summary.resettablePL}"></td></tr>
+                        <tr><td>Resettable PL Time</td><td th:text="${summary.resettablePLTime}"></td></tr>
+                        <tr><td>Financing</td><td th:text="${summary.financing}"></td></tr>
+                        <tr><td>Commission</td><td th:text="${summary.commission}"></td></tr>
+                        <tr><td>Guaranteed Execution Fees</td><td th:text="${summary.guaranteedExecutionFees}"></td></tr>
+                        <tr><td>Margin Rate</td><td th:text="${summary.marginRate}"></td></tr>
+                        <tr><td>Open Trade Count</td><td th:text="${summary.openTradeCount}"></td></tr>
+                        <tr><td>Open Position Count</td><td th:text="${summary.openPositionCount}"></td></tr>
+                        <tr><td>Pending Order Count</td><td th:text="${summary.pendingOrderCount}"></td></tr>
+                        <tr><td>Hedging Enabled</td><td th:text="${summary.hedgingEnabled}"></td></tr>
+                        <tr><td>Unrealized PL</td><td th:text="${summary.unrealizedPL}"></td></tr>
+                        <tr><td>Margin Used</td><td th:text="${summary.marginUsed}"></td></tr>
+                        <tr><td>Margin Available</td><td th:text="${summary.marginAvailable}"></td></tr>
+                        <tr><td>Position Value</td><td th:text="${summary.positionValue}"></td></tr>
+                        <tr><td>Withdrawal Limit</td><td th:text="${summary.withdrawalLimit}"></td></tr>
+                        <tr><td>NAV</td><td th:text="${summary.nAV}"></td></tr>
+                        <!-- Ide lehet folytatni a többi mezővel -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="text-align:center; margin-top:20px;">
+                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/header :: head('MNB - Eredmény')}"></head>
 
 <body class="is-preload">
@@ -20,9 +21,8 @@
 
             <!-- Content -->
             <section>
-                <h1>Árfolyam eredmény: <span th:text="${currency}"></span></h1>
+                <h2>Árfolyam eredmény: <span th:text="${currency}"></span></h2>
 
-                <!-- Táblázat -->
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -36,18 +36,16 @@
                         <tr th:each="rate : ${rates}">
                             <td th:text="${rate.date}"></td>
                             <td th:text="${rate.currency}"></td>
-                            <td th:text="${#numbers.formatDecimal(rate.rate, 1, 2)}"></td>
+                            <td th:text="${rate.rate}"></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Grafikon -->
-                <div class="box" style="margin-top:30px; padding:20px;">
+                <div class="box chart-container" style="margin-top:30px; padding:20px;">
                     <canvas id="chartCanvas" style="width:100%; max-width:800px; height:400px; margin:0 auto; display:block;"></canvas>
                 </div>
 
-                <!-- Vissza gomb -->
                 <div style="text-align:center; margin-top:30px;">
                     <a th:href="@{/soap}" class="button primary">Új lekérdezés</a>
                     <a th:href="@{/dashboard}" class="button" style="margin-left:10px;">Vissza a Dashboardra</a>
@@ -76,32 +74,21 @@
             datasets: [{
                 label: 'Árfolyam (' + /*[[${currency}]]*/ + ')',
                 data: dataValues,
-                borderColor: '#0066cc',
-                backgroundColor: 'rgba(0, 102, 204, 0.1)',
-                borderWidth: 3,
-                pointRadius: 4,
-                pointBackgroundColor: '#0066cc',
-                tension: 0.3,
-                fill: true
+                borderWidth: 2,
+                borderColor: '#0033cc',
+                pointRadius: 3,
+                tension: 0.3
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    labels: { font: { size: 16, family: 'Arial' } }
-                }
+                legend: { labels: { font: { size: 14 } } }
             },
             scales: {
-                x: {
-                    ticks: { font: { size: 14 } },
-                    grid: { color: 'rgba(0,0,0,0.05)' }
-                },
-                y: {
-                    ticks: { font: { size: 14 } },
-                    grid: { color: 'rgba(0,0,0,0.05)' }
-                }
+                x: { ticks: { font: { size: 14 } } },
+                y: { ticks: { font: { size: 14 } } }
             }
         }
     });

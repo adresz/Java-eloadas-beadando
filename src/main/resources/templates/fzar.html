@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/header :: head('Forex - Pozíció Zárás')}"></head>
 
 <body class="is-preload">
@@ -15,48 +16,47 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="#" class="logo"><strong>Forex</strong> Zárás</a>
+                <a href="#" class="logo"><strong>Forex</strong> Pozíció Zárás</a>
             </header>
 
             <!-- Content -->
             <section>
-                <h1>Pozíció Lezárása</h1>
+                <h1>Nyitott pozíciók lezárása</h1>
 
-                <!-- Űrlap -->
                 <div class="box">
                     <form th:action="@{/fzar}" method="post">
-                        <label for="tradeId">Válaszd ki a lezárandó pozíciót:</label>
-                        <select name="tradeId" id="tradeId" class="select" required>
+
+                        <label for="tradeId">Válaszd ki a lezárandó trade-et:</label><br>
+                        <select name="tradeId" id="tradeId" required class="select">
                             <option value="">-- Válassz pozíciót --</option>
-                            <option th:each="t : ${trades}"
-                                    th:value="${t.id}"
-                                    th:text="'ID: ' + ${t.id} + ' | ' + ${t.instrument} + ' | Mennyiség: ' + ${t.currentUnits} + ' | P/L: ' + ${#numbers.formatDecimal(t.unrealizedPL, 1, 2)}">
-                            </option>
+
+                            <!-- Nyitott trade-ek listázása -->
+                            <th:block th:each="t : ${trades}">
+                                <option th:value="${t.id}"
+                                        th:text="'ID: ' + ${t.id} + ' | ' + ${t.instrument} + ' | ' + ${t.currentUnits}">
+                                </option>
+                            </th:block>
                         </select>
+
+                        <br><br>
 
                         <button type="submit" class="primary">Pozíció lezárása</button>
                     </form>
                 </div>
 
-                <!-- Sikeres üzenet -->
-                <div th:if="${msg}" class="box" style="background:#e8f5e9; border-left:4px solid #4caf50;">
-                    <p style="color:#2e7d32; margin:0;" th:text="${msg}"></p>
+                <div class="box" th:if="${msg}" style="margin-top:20px; color:green;">
+                    <p th:text="${msg}"></p>
                 </div>
 
-                <!-- Hibás üzenet -->
-                <div th:if="${error}" class="box" style="background:#ffebee; border-left:4px solid #e74c3c;">
-                    <p style="color:#c0392b; margin:0;" th:text="${error}"></p>
-                </div>
-
-                <!-- Nincs nyitott pozíció -->
-                <div th:if="${trades == null or trades.isEmpty()}" style="text-align:center; color:#999; padding:40px;">
-                    <p>Nincs lezárható pozíció.</p>
+                <div class="box" th:if="${error}" style="margin-top:20px; color:red;">
+                    <p th:text="${error}"></p>
                 </div>
 
                 <!-- Vissza gomb -->
                 <div style="text-align:center; margin-top:30px;">
-                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                    <a th:href="@{/}" class="button">Vissza a Dashboardra</a>
                 </div>
+
             </section>
 
         </div>

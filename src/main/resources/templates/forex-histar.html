@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/header :: head('Forex - Historikus Árfolyamok')}"></head>
 
 <body class="is-preload">
@@ -15,18 +16,18 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="#" class="logo"><strong>Forex</strong> Historikus</a>
+                <a href="#" class="logo"><strong>Forex</strong> Historikus Árfolyamok</a>
             </header>
 
             <!-- Content -->
             <section>
                 <h1>Historikus Árfolyamok</h1>
 
-                <!-- Űrlap -->
+                <!-- Form -->
                 <div class="box">
                     <form method="get" th:action="@{/forex-histar}">
                         <label>Instrumentum:</label>
-                        <select name="instrument" class="select">
+                        <select name="instrument" th:value="${selectedInstrument}">
                             <option th:each="i : ${instruments}"
                                     th:value="${i}"
                                     th:text="${i}"
@@ -34,7 +35,7 @@
                         </select>
 
                         <label>Időfelbontás:</label>
-                        <select name="granularity" class="select">
+                        <select name="granularity" th:value="${selectedGranularity}">
                             <option th:each="g : ${gran}"
                                     th:value="${g.key}"
                                     th:text="${g.value}"
@@ -46,42 +47,42 @@
                 </div>
 
                 <!-- Hibaüzenet -->
-                <div th:if="${error}" class="box" style="background:#ffebee; border-left:4px solid #e74c3c;">
-                    <p style="color:#c0392b; margin:0;" th:text="${error}"></p>
+                <div th:if="${error}" style="margin-top: 20px;">
+                    <p th:text="${error}" style="color:red;"></p>
                 </div>
 
-                <!-- Táblázat -->
-                <div class="table-wrapper" th:if="${candles}">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Idő</th>
-                            <th>Nyitó</th>
-                            <th>Záró</th>
-                            <th>Magaspont</th>
-                            <th>Alacsonypont</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="c : ${candles}">
-                            <td th:text="${c.time}"></td>
-                            <td th:text="${#numbers.formatDecimal(c.mid.o, 1, 5)}"></td>
-                            <td th:text="${#numbers.formatDecimal(c.mid.c, 1, 5)}"></td>
-                            <td th:text="${#numbers.formatDecimal(c.mid.h, 1, 5)}"></td>
-                            <td th:text="${#numbers.formatDecimal(c.mid.l, 1, 5)}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Historikus adatok táblázat -->
+                <table border="1" cellpadding="6" th:if="${candles}" style="margin-top: 20px; width:100%;">
+                    <thead>
+                    <tr>
+                        <th>Idő</th>
+                        <th>Nyitó</th>
+                        <th>Záró</th>
+                        <th>High</th>
+                        <th>Low</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${candles}">
+                        <td th:text="${c.time}"></td>
+                        <td th:text="${c.mid.o}"></td>
+                        <td th:text="${c.mid.c}"></td>
+                        <td th:text="${c.mid.h}"></td>
+                        <td th:text="${c.mid.l}"></td>
+                    </tr>
+                    </tbody>
+                </table>
 
                 <!-- Vissza gomb -->
                 <div style="text-align:center; margin-top:30px;">
-                    <a th:href="@{/dashboard}" class="button">Vissza a Dashboardra</a>
+                    <a th:href="@{/}" class="button">Vissza a Dashboardra</a>
                 </div>
+
             </section>
 
         </div>
     </div>
+
 </div>
 
 <!-- Scripts -->
